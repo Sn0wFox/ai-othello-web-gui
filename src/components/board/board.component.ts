@@ -1,4 +1,9 @@
-import {Component} from '@angular/core';
+import { Component }  from '@angular/core';
+import { OnInit }     from '@angular/core';
+
+import * as Bluebird  from 'bluebird';
+
+import { PrologService }  from '../../services/prolog/prolog.service';
 
 @Component({
   moduleId: module.id,
@@ -8,19 +13,32 @@ import {Component} from '@angular/core';
     './board.component.css'
   ]
 })
-export class BoardComponent {
-  protected name: string = "Board";
+export class BoardComponent implements OnInit {
+
+  /**
+   * The real current state of the board.
+   */
+  protected board: number[][] = [];
   
-  protected board: number[][] = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
-    [0, 0, 0, 0, 1,-1, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-  ];
+  /**
+   * Instantiates an object,
+   * and instantiates private services.
+   */
+  constructor(private prologService: PrologService) {
+    // Nothing else to do
+  }
+  
+  /**
+   * Initialize the object properly:
+   * initialize the board.
+   */
+  public ngOnInit(): Bluebird<void> {
+    return this.prologService
+      .getInitialBoard()
+      .then((board) => {
+        this.board = board;
+        return;
+      });
+  }
+  
 }
