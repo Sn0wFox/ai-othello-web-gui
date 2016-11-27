@@ -1,3 +1,32 @@
 #board {
   height: 100vh;
+  background-image: url("../../../ressources/board.png");
+  background-repeat: no-repeat; 
+  background-size: auto 100vh;
+  background-position: center;
+}
+
+#playable-board {
+  height: 88.3%;
+  /* background-color: red; */
+  top: 5.85%;
+  position: relative;
+  margin: auto;
+  width: 88.3vh;
+}
+
+.token {
+  height: 84%;
+  margin-top: 8%;
+  margin-left: 4%;
+}
+
+.row {
+  height: 12.5%;
+}
+
+.col {
+  float: left;
+  width: 12.5%;
+  height: 100%;
 }

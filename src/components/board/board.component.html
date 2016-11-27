@@ -1,1 +1,23 @@
-<img id="board" src="../../../ressources/board.png" alt="Board">
+<!-- <img id="board" src="../../../ressources/board.png" alt="Board"> -->
+<div id="board">
+  <div id="playable-board">
+  
+    <div *ngFor="let row of board; let i = index">
+      <div *ngIf="i != 0 && i != 9" class="row">
+      
+        <div *ngFor="let token of row; let j = index">
+          <div *ngIf="j != 0 && j != 9" class="col">
+            <div *ngIf="token == -1">
+              <img src="../../../ressources/white-token.png" alt="white-token" class="token">
+            </div>
+            <div *ngIf="token == 1">
+              <img src="../../../ressources/black-token.png" alt="black-token" class="token">
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    
+  </div>
+</div>
