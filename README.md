@@ -14,6 +14,7 @@ This GUI only works if the Prolog server from the AI project correctly define th
 
 1. Node.js
 2. Swipl
+3. (Gulp ?)
 
 ## Run it
 
