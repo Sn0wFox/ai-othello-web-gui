@@ -12,9 +12,9 @@
     <script src="https://unpkg.com/systemjs@0.19.39/dist/system.src.js"></script>
 
     <script>window.autoBootstrap = true;</script>
-    <script src="https://cdn.rawgit.com/angular/angular.io/b3c65a9/public/docs/_examples/_boilerplate/systemjs.config.web.js"></script>
+    <script src="systemjs.config.js"></script>
     <script>
-      System.import('components/app').catch(function(err){ console.error(err); });
+      System.import('src').catch(function(err){ console.error(err); });
     </script>
   </head>
   <body>
