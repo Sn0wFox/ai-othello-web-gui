@@ -17,7 +17,7 @@ export class AIPlayer extends AbstractPlayer {
    * and returns the updated board when done.
    */
   public play(board: number[][]): Bluebird<number[][]> {
-    return Bluebird.reject(new Error("This function is not implemented yet."));
+    return this.prologService.updateBoardFromAIPlay(board, this.level, this);
   }
   
   /**
