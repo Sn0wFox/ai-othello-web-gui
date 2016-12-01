@@ -1,6 +1,8 @@
 {
   "name": "ai-othello-web-gui",
-  "dependencies": {},
+  "dependencies": {
+    "body-parser": "registry:npm/body-parser#1.15.2+20161116154925"
+  },
   "globalDependencies": {
     "bluebird": "registry:dt/bluebird#3.0.0+20161007114152",
     "core-js": "registry:dt/core-js#0.0.0+20160914114559",
