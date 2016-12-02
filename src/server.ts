@@ -39,8 +39,7 @@ app.get("/api/board/initial", (req, res, next) => {
           res.status(500).end();
           return;
         }
-        console.log(body);
-        res.status(200).send(body);
+        res.status(200).send(JSON.parse(body));
       }
     )
 });
@@ -58,7 +57,7 @@ app.post("/api/board/update", (req, res, next) => {
     {
       url: PRO_PROTOCOL + PRO_HOST + ':' + PRO_PORT + "/api/board/update" + params,
       json: true,
-      body: req.body
+      body: JSON.parse(req.body.board)
     },
     (err, httpResponse, body): void => {
         if (err) {
@@ -81,7 +80,7 @@ app.post("/api/play", (req, res, next) => {
     {
       url: PRO_PROTOCOL + PRO_HOST + ':' + PRO_PORT + "/api/play" + params,
       json: true,
-      body: req.body
+      body: JSON.parse(req.body.board)
     },
     (err, httpResponse, body): void => {
         if (err) {
@@ -105,7 +104,7 @@ app.post("/api/play/validate", (req, res, next) => {
     {
       url: PRO_PROTOCOL + PRO_HOST + ':' + PRO_PORT + "/api/play/validate" + params,
       json: true,
-      body: req.body
+      body: JSON.parse(req.body.board)
     },
     (err, httpResponse, body): void => {
         if (err) {
@@ -127,7 +126,7 @@ app.post("/api/play/able", (req, res, next) => {
     {
       url: PRO_PROTOCOL + PRO_HOST + ':' + PRO_PORT + "/api/play/able" + params,
       json: true,
-      body: req.body
+      body: JSON.parse(req.body.board)
     },
     (err, httpResponse, body): void => {
         if (err) {
