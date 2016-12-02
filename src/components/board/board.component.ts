@@ -4,6 +4,7 @@ import { OnInit }     from '@angular/core';
 import * as Bluebird  from 'bluebird';
 
 import { PrologService }  from '../../services/prolog/prolog.service';
+import { AIPlayer }       from '../../objects/ai-player';
 
 @Component({
   moduleId: module.id,
@@ -37,8 +38,17 @@ export class BoardComponent implements OnInit {
       .getInitialBoard()
       .then((board) => {
         this.board = board;
+        this.game();
         return;
       });
+  }
+  
+  public game(): Bluebird<void> {
+    let player1 = new AIPlayer(-1, this.prologService, 0);
+    return player1.play(this.board).then((board) => {
+      this.board = board;
+      return;
+    })
   }
   
 }
