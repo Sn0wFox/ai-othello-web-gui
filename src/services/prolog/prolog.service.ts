@@ -8,7 +8,7 @@ import { Player }     from '../../objects/player.interface';
 /**
  * The root URL from which the prolog server is accessible.
  */
-const PROLOG_SERVER_ROOT: string = "http://localhost:8000";
+const PROLOG_SERVER_ROOT: string = "http://localhost:3000";
 
 @Injectable()
 export class PrologService {
@@ -35,13 +35,14 @@ export class PrologService {
    * /api/board/update
    */
   public updateBoard(board: number[][], player: Player, moveX: number, moveY: number): Bluebird<number[][]> {
+    let datas = {"board": JSON.stringify(board)};
     return Bluebird.resolve(
       ajax({
         url: PROLOG_SERVER_ROOT + "/api/board/update" +
              "?player=" + player.getPieceColor() +
              "&movex=" + moveX +
              "&movey=" + moveY,
-        data: board
+        data: datas
       }))
       .then((board) => {
         return board;
@@ -54,12 +55,15 @@ export class PrologService {
    * /api/play
    */
   public updateBoardFromAIPlay(board: number[][], ai: number, player: Player): Bluebird<number[][]> {
+    let datas = {"board": JSON.stringify(board)};
     return Bluebird.resolve(
       ajax({
+        method: 'POST',
+        dataType: 'json',
         url: PROLOG_SERVER_ROOT + "/api/play" +
-             "?ai=" + ai +
-             "&player=" + player.getPieceColor(),
-        data: board
+             "?player=" + player.getPieceColor() +
+             "&ai=" + ai,
+        data: datas
       }))
       .then((board) => {
         return board;
@@ -72,11 +76,12 @@ export class PrologService {
    * /api/play/able
    */
   public canPlayerPlay(board: number[][], player: Player): Bluebird<boolean> {
+    let datas = {"board": JSON.stringify(board)};
     return Bluebird.resolve(
       ajax({
         url: PROLOG_SERVER_ROOT + "/api/play/able" +
              "?player=" + player.getPieceColor(),
-        data: board
+        data: datas
       }))
       .then((res) => {
         return res.playable;
@@ -89,13 +94,14 @@ export class PrologService {
    * /api/play/validate
    */
   public isValideMove(board: number[][], player: Player, moveX: number, moveY: number): Bluebird<boolean> {
+    let datas = {"board": JSON.stringify(board)};
     return Bluebird.resolve(
       ajax({
         url: PROLOG_SERVER_ROOT + "/api/play/validate" +
              "?player=" + player.getPieceColor() +
              "&movex=" + moveX +
              "&movey=" + moveY,
-        data: board
+        data: datas
       }))
       .then((res) => {
         return res.playable;
