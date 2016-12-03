@@ -38,6 +38,8 @@ export class PrologService {
     let datas = {"board": JSON.stringify(board)};
     return Bluebird.resolve(
       ajax({
+	      method: 'POST',
+	      dataType: 'json',
         url: PROLOG_SERVER_ROOT + "/api/board/update" +
              "?player=" + player.getPieceColor() +
              "&movex=" + moveX +
@@ -79,13 +81,18 @@ export class PrologService {
     let datas = {"board": JSON.stringify(board)};
     return Bluebird.resolve(
       ajax({
+	      method: 'POST',
+	      dataType: 'json',
         url: PROLOG_SERVER_ROOT + "/api/play/able" +
              "?player=" + player.getPieceColor(),
         data: datas
       }))
       .then((res) => {
         return res.playable;
-      });
+      })
+	    .catch((err) => {
+    	  console.log(err);
+	    });
   }
   
   /**
@@ -97,6 +104,8 @@ export class PrologService {
     let datas = {"board": JSON.stringify(board)};
     return Bluebird.resolve(
       ajax({
+	      method: 'POST',
+	      dataType: 'json',
         url: PROLOG_SERVER_ROOT + "/api/play/validate" +
              "?player=" + player.getPieceColor() +
              "&movex=" + moveX +
