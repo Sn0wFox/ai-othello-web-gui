@@ -4,7 +4,9 @@ import { OnInit }     from '@angular/core';
 import * as Bluebird  from 'bluebird';
 
 import { PrologService }  from '../../services/prolog/prolog.service';
+import { EventService }   from '../../services/events/event.service';
 import { AIPlayer }       from '../../lib/ai-player';
+import { HumanPlayer }    from '../../lib/human-player';
 
 @Component({
   moduleId: module.id,
@@ -25,7 +27,10 @@ export class BoardComponent implements OnInit {
    * Instantiates an object,
    * and instantiates private services.
    */
-  constructor(private prologService: PrologService) {
+  constructor(
+  	private prologService: PrologService,
+  	private eventService: EventService
+  ) {
     // Nothing else to do
   }
   
@@ -48,6 +53,7 @@ export class BoardComponent implements OnInit {
 	 */
 	public game(): Bluebird<void> {
     let player1 = new AIPlayer(-1, this.prologService, 0);
+    let player2 = new HumanPlayer(1, this.prologService, this.eventService);
     return player1
       .play(this.board)
 	    .then((board) => {
@@ -58,9 +64,16 @@ export class BoardComponent implements OnInit {
         this.clickable = true;
 				return;
 	    })
+	    .then(() => {
+    	  return player2.play(this.board);
+	    })
+	    .then((board) => {
+    	  this.board = board;
+	    });
   }
 
   protected clickCase(x: number, y: number): void {
+		this.eventService.emit("case-clicked", {x: x, y: y}, true);
 		if(this.clickable) {
 			console.log(`clicked! (${x}, ${y})`);
 		} else {
@@ -69,4 +82,8 @@ export class BoardComponent implements OnInit {
   }
 
   protected clickable: boolean = false;
+
+	public setClickable(clickable: boolean): void {
+		this.clickable = clickable;
+	}
 }

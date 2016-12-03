@@ -7,8 +7,7 @@ import { AppComponent }   from '../components/app/app.component';
 import { BoardComponent } from '../components/board/board.component';
 
 import { PrologService }  from '../services/prolog/prolog.service';
-
-
+import { EventService }   from '../services/events/event.service';
 
 @NgModule({
   imports: [
@@ -21,7 +20,8 @@ import { PrologService }  from '../services/prolog/prolog.service';
     BoardComponent
   ],
   providers: [
-    PrologService
+    PrologService,
+	  EventService
   ],
   bootstrap: [ AppComponent ]
 })
