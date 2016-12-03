@@ -139,10 +139,10 @@ app.post("/api/play/able", (req, res, next) => {
 });
 
 
-// Actually instanciate the server
+// Actually instantiate the server
 let server = http.createServer(app);
 
-// Run the server with the previsouly defined parameters
+// Run the server with the previously defined parameters
 server.listen(PORT, HOST, () => {
   // Keep a track of the launch somewhere in the console
   console.log("Server running at http://" + HOST + ":" + PORT);
