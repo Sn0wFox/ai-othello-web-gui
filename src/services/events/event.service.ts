@@ -29,17 +29,21 @@ export class EventService {
 	 * (i.e. there is no emitter with the id key)
 	 * a new one is created and added to this.emitters.
 	 * If there isn't any handler for this events,
-	 * this method store the event and the associated value
+	 * and that losable is set to false (default),
+	 * this method stores the event and the associated value
 	 * into this.orphanEvents.
 	 */
-	public emit(key: string, value?: any): void {
+	public emit(key: string, value?: any, losable?: boolean): void {
 		value = value ? value : key;
+		losable = losable || false;
 		if(!this.emitters[key] || this.emitters[key].observers.length === 0) {  // Note this.emitters[key].isUnsubscribed is false even when observers.length is set to 0
 			this.emitters[key] = new EventEmitter<any>();
-			if(!this.orphanEvents[key]) {
-				this.orphanEvents[key] = [];
+			if(!losable) {
+				if(!this.orphanEvents[key]) {
+					this.orphanEvents[key] = [];
+				}
+				this.orphanEvents[key].push(value);
 			}
-			this.orphanEvents[key].push(value);
 		} else {
 			this.emitters[key].emit(value);
 		}
@@ -54,7 +58,7 @@ export class EventService {
 	 * This handler will be called each time the event key
 	 * is received.
 	 * If there was some event based on key that were fired
-	 * before any handler was set, this method fire them
+	 * before any handler was set, this method fires them
 	 * again and then delete them from this.orphanEvents.
 	 */
 	public on(key: string, todo: (emitted: any) => any) {
@@ -62,6 +66,35 @@ export class EventService {
 			this.emitters[key] = new EventEmitter<any>();
 		}
 		this.emitters[key].subscribe(todo);
+		if(this.orphanEvents[key]) {
+			for(let value of this.orphanEvents[key]) {
+				this.emit(key, value);
+			}
+			delete this.orphanEvents[key];
+		}
+	}
+
+	/**
+	 * Registers a one-time use handler for the event identified by
+	 * the string key.
+	 * If no emitter is able to handle the given event,
+	 * (i.e. there is no emitter with the id key)
+	 * a new one is created and added to this.emitters.
+	 * This handler will be called only the first time the event key
+	 * is received.
+	 * If there was some event based on key that were fired
+	 * before any handler was set, this method fires them
+	 * again and then delete them from this.orphanEvents.
+	 */
+	public once(key: string, todo: (emitted: any) => any) {
+		if(!this.emitters[key]) {
+			this.emitters[key] = new EventEmitter<any>();
+		}
+		let a = this.emitters[key].subscribe((emitted: any): any => {
+			a.unsubscribe();
+			delete this.emitters[key];
+			return todo(emitted);
+		});
 		if(this.orphanEvents[key]) {
 			for(let value of this.orphanEvents[key]) {
 				this.emit(key, value);
