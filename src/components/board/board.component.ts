@@ -55,10 +55,44 @@ export class BoardComponent implements OnInit {
 	public game(): Bluebird<void> {
     let player1 = new AIPlayer(-1, this.prologService, 0);
     let player2 = new HumanPlayer(1, this.prologService, this.eventService);
-    let currentPlayer: Player = player1;
-    let waitingPlayer: Player = player2;
+    let currentPlayer: Player = player2;
+    let waitingPlayer: Player = player1;
 
-    return player1
+    let endOfGame = false;
+    return this
+	    .promiseLoop(
+	    	() => {
+	        return !endOfGame;
+		    },
+		    () => {
+					return this.prologService
+						.canPlayerPlay(this.board, currentPlayer)
+						.then((playable: boolean) => {
+							if(playable) {
+								return currentPlayer
+									.play(this.board)
+									.then((board) => {
+										this.board = board;
+										let temp = currentPlayer;
+										currentPlayer = waitingPlayer;
+										waitingPlayer = temp;
+									});
+							} else {
+								return this.prologService
+									.canPlayerPlay(this.board, waitingPlayer)
+									.then((playable2: boolean) => {
+										if(!playable2) {
+											endOfGame = true;
+										}
+									})
+							}
+						});
+		    })
+	    .then(() => {
+    	  console.log("End of the game!");
+	    });
+
+    /*return player1
       .play(this.board)
 	    .then((board) => {
 	      this.board = board;
@@ -89,7 +123,7 @@ export class BoardComponent implements OnInit {
     	  	console.log("done!");
     	  	return;
 	      })
-	    });
+	    });*/
   }
 
   protected clickCase(x: number, y: number): void {

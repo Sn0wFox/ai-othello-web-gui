@@ -18,25 +18,21 @@ export class HumanPlayer extends AbstractPlayer {
    * and returns the updated board when done.
    */
   public play(board: number[][]): Bluebird<number[][]> {
+  	let move: {x: number, y: number};
 		return this
 			.waitForEvent("case-clicked")
 			.then((coord: {x: number, y: number}) => {
+				move = coord;
 				console.log(`The player tried to play in (${coord.x}, ${coord.y})`);
 			})
 			.then(() => {
-				// Return a mock array to see if everything works as expected
-				return [
-					[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-					[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-					[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-					[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-					[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-					[0, 0, 0, 0, 1,-1, 0, 0, 0, 0],
-					[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-					[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-					[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-					[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-				];
+				return this.prologService.isValideMove(board, this, move.x, move.y);
+			})
+			.then((playable: boolean) => {
+				if(playable) {
+					return this.prologService.updateBoard(board, this, move.x, move.y)
+				}
+				return this.play(board);
 			});
   }
   
