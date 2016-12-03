@@ -42,13 +42,31 @@ export class BoardComponent implements OnInit {
         return;
       });
   }
-  
-  public game(): Bluebird<void> {
+
+	/**
+	 * This is just a test for the moment.
+	 */
+	public game(): Bluebird<void> {
     let player1 = new AIPlayer(-1, this.prologService, 0);
-    return player1.play(this.board).then((board) => {
-      this.board = board;
-      return;
-    })
+    return player1
+      .play(this.board)
+	    .then((board) => {
+	      this.board = board;
+	      return;
+	    })
+	    .then(() => {
+        this.clickable = true;
+				return;
+	    })
   }
-  
+
+  protected clickCase(x: number, y: number): void {
+		if(this.clickable) {
+			console.log(`clicked! (${x}, ${y})`);
+		} else {
+			console.log("This is not supposed to be clickable right now.");
+		}
+  }
+
+  protected clickable: boolean = false;
 }
