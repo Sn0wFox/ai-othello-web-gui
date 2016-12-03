@@ -5,6 +5,7 @@ import * as Bluebird  from 'bluebird';
 
 import { PrologService }  from '../../services/prolog/prolog.service';
 import { EventService }   from '../../services/events/event.service';
+import { Player }         from '../../lib/player.interface';
 import { AIPlayer }       from '../../lib/ai-player';
 import { HumanPlayer }    from '../../lib/human-player';
 
@@ -54,6 +55,9 @@ export class BoardComponent implements OnInit {
 	public game(): Bluebird<void> {
     let player1 = new AIPlayer(-1, this.prologService, 0);
     let player2 = new HumanPlayer(1, this.prologService, this.eventService);
+    let currentPlayer: Player = player1;
+    let waitingPlayer: Player = player2;
+
     return player1
       .play(this.board)
 	    .then((board) => {
@@ -69,6 +73,22 @@ export class BoardComponent implements OnInit {
 	    })
 	    .then((board) => {
     	  this.board = board;
+    	  return;
+	    })
+	    .then(() => {
+    	  console.log("here!");
+    	  let i = 0;
+    	  return this.promiseLoop(() => {
+    	  	return i <= 10;
+	      }, () => {
+    	  	return Bluebird.delay(250).then(() => {
+			      console.log("i'm calling that");
+			      console.log(i++);
+		      });
+	      }).then(() => {
+    	  	console.log("done!");
+    	  	return;
+	      })
 	    });
   }
 
@@ -85,5 +105,15 @@ export class BoardComponent implements OnInit {
 
 	public setClickable(clickable: boolean): void {
 		this.clickable = clickable;
+	}
+
+	protected promiseLoop(condition: (params?: any) => boolean, action: (params?: any) => Bluebird<any>) {
+		let loop = () => {
+			if(!condition()) {
+				return;
+			}
+			return action().then(loop);
+		};
+		return Bluebird.resolve().then(loop);
 	}
 }
