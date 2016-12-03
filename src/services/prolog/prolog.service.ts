@@ -3,7 +3,7 @@ import * as Bluebird  from 'bluebird';
 import { Injectable } from '@angular/core';
 import { ajax }       from 'jquery';
 
-import { Player }     from '../../objects/player.interface';
+import { Player }     from '../../lib/player.interface';
 
 /**
  * The root URL from which the prolog server is accessible.

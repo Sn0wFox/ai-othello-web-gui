@@ -4,7 +4,7 @@ import { OnInit }     from '@angular/core';
 import * as Bluebird  from 'bluebird';
 
 import { PrologService }  from '../../services/prolog/prolog.service';
-import { AIPlayer }       from '../../objects/ai-player';
+import { AIPlayer }       from '../../lib/ai-player';
 
 @Component({
   moduleId: module.id,
