@@ -8,13 +8,14 @@ This GUI only works if the Prolog server from the AI project correctly define th
 * /api/board/initial
 * /api/board/update
 * /api/play/
+* /api/play/able
 * /api/play/validate
 
 ## Prerequisites
 
 1. Node.js
 2. Swipl
-3. (Gulp ?)
+3. Gulp
 
 ## Run it
 
@@ -28,6 +29,7 @@ This GUI only works if the Prolog server from the AI project correctly define th
 
     git clone https://github.com/Sn0wFox/ai-othello-web-gui.git
     cd ai-othello-web-gui
+    npm install -g gulp typescript typings
     npm install
     typings install
     gulp build
